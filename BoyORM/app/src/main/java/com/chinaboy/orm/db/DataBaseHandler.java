@@ -5,10 +5,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
-
 import java.util.ArrayList;
 import java.util.List;
-import mrfu.db.DBMsgObject.ContentCondition;
 
 public class DataBaseHandler extends Handler {
 	private AppDatabaseHelper appAppDatabase;
@@ -65,7 +63,7 @@ public class DataBaseHandler extends Handler {
 				List<T> failModels = new ArrayList<T>();
 				database.beginTransaction();
 				try{
-					for(ContentCondition<T> condition : msgObj.contentConditionList){
+					for(DBMsgObject.ContentCondition<T> condition : msgObj.contentConditionList){
 						if (condition != null && condition.contentValues != null) {
 							long id = database.insert(tableName, null, condition.contentValues);//进行插入操作
 							if(id != -1){//插入成功，将对应的model 值放入到 successModels 中
@@ -100,7 +98,7 @@ public class DataBaseHandler extends Handler {
 				List<T> failModels = new ArrayList<T>();
 				database.beginTransaction();
 				try{
-					for(ContentCondition<T> condition : msgObj.contentConditionList){
+					for(DBMsgObject.ContentCondition<T> condition : msgObj.contentConditionList){
 						if (condition != null && condition.contentValues != null) {
 							int count = database.update(tableName, condition.contentValues, condition.whereClause, condition.whereArgs);
 							if(count > 0){
@@ -134,7 +132,7 @@ public class DataBaseHandler extends Handler {
 				List<T> failModels = new ArrayList<T>();
 				database.beginTransaction();
 				try{
-					for(ContentCondition<T> condition : msgObj.contentConditionList){
+					for(DBMsgObject.ContentCondition<T> condition : msgObj.contentConditionList){
 						if (condition != null && condition.contentValues != null) {
 							long id = database.replace(tableName, null, condition.contentValues);
 							if(id != -1){
@@ -166,7 +164,7 @@ public class DataBaseHandler extends Handler {
 				int rows = 0;//删除的行数，用于回调到主线程的时候使用
 				database.beginTransaction();
 				try{
-					for(ContentCondition<T> condition : msgObj.contentConditionList){
+					for(DBMsgObject.ContentCondition<T> condition : msgObj.contentConditionList){
 						if (condition != null) {
 							rows += database.delete(tableName, condition.whereClause, condition.whereArgs);
 						}

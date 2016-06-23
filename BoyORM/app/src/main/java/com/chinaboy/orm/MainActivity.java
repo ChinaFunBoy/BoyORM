@@ -1,52 +1,45 @@
 package com.chinaboy.orm;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+
+import com.chinaboy.orm.db.BaseModel;
+import com.chinaboy.orm.db.DBOperateAsyncListener;
+import com.chinaboy.orm.db.DatabaseManager;
+import com.chinaboy.orm.db.DatabaseOptionType;
+import com.chinaboy.orm.model.Teacher;
+
+import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ButterKnife.inject(this);
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+    @OnClick(R.id.button)
+    public void addData() {
+        Teacher teacher = new Teacher();
+        teacher.name = "mm";
+        DatabaseManager.getInstance().insert(Teacher.class, teacher, new DBOperateAsyncListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public <T extends BaseModel> void onPostExecute(DatabaseOptionType optionType, Class<T> claz,
+                                                            List<T> successModels, List<T> failModels) {
+                if (successModels != null) {
+                    Log.i("Code", "Success = " + successModels.get(0).toString());
+                } else if (failModels != null) {
+                    Log.i("Code", "Fail = " + failModels.get(0).toString());
+                }
             }
         });
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

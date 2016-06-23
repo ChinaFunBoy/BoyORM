@@ -25,7 +25,7 @@ public class DatabaseManager {
 	private boolean isInited = false;;
 
 	private DatabaseManager() {
-		uniqueMap = new HashMap<Class<?>, String>();
+		uniqueMap = new HashMap<>();
 	}
 
 	public synchronized boolean isInited() {
